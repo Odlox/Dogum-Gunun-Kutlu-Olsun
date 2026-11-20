@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doğum Günün Kutlu Olsun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Ana Buket Sahnesi */
+    .bouquet-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    svg#bouquet-svg {
+      width: min(94vw, 760px);
+      height: min(94vh, 840px);
+      max-width: 100%;
+      max-height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 18px 38px rgba(255, 130, 185, 0.14));
+    }
+
+    /* =========================================================
+       HAPPY BIRTHDAY BAŞLIK ANİMASYONU VE STİLİ (3.35s+)
+       ========================================================= */
+    @keyframes birthdayTitleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.9);
+        filter: blur(6px);
+      }
+      65% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.02);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes birthdayFloatBreeze {
+      0%, 100% {
+        transform: translateY(0px) rotate(-0.8deg);
+      }
+      50% {
+        transform: translateY(-4px) rotate(0.9deg);
+      }
+    }
+
+    .birthday-title-enter {
+      opacity: 0;
+      transform-origin: 400px -22px;
+      animation: birthdayTitleReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) 3.35s forwards;
+    }
+
+    .birthday-title-float {
+      transform-origin: 400px -22px;
+      animation: birthdayFloatBreeze 5.6s ease-in-out 4.5s infinite;
+    }
+
+    .birthday-script-text {
+      font-family: 'Great Vibes', cursive;
+      font-size: 62px;
+      letter-spacing: 1.2px;
+      text-anchor: middle;
+    }
+
+    /* =========================================================
+       AŞAMA 1: SAPLARIN AŞAĞIDAN YUKARI UZAMASI (0.0s - 0.85s)
+       ========================================================= */
+    @keyframes drawStem {
+      0% {
+        stroke-dashoffset: 380;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+
+    .stem-path {
+      stroke-dasharray: 380;
+      stroke-dashoffset: 380;
+      animation: drawStem 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--stem-delay, 0s);
+    }
+
+    /* =========================================================
+       AŞAMA 2: YAPRAKLARIN FİLİZLENİP AÇILMASI (0.6s - 1.45s)
+       ========================================================= */
+    @keyframes sproutLeaf {
+      0% {
+        transform: scale(0) rotate(-18deg);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .leaf-sprout-wrapper {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      opacity: 0;
+      animation: sproutLeaf 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation-delay: var(--leaf-delay, 0.65s);
+    }
+
+    /* =========================================================
+       AŞAMA 3: ÇİÇEKLERİN MERKEZDEN DIŞA AÇILMASI (1.1s - 2.35s)
+       ========================================================= */
+    @keyframes bloomRingOpen {
+      0% {
+        transform: scale(0.02) rotate(-26deg);
+        opacity: 0;
+      }
+      35% {
+        opacity: 1;
+      }
+      78% {
+        transform: scale(1.045) rotate(2deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .bloom-ring-enter {
+      opacity: 0;
+      transform-origin: 0px 0px;
+      animation: bloomRingOpen 0.72s cubic-bezier(0.22, 1.28, 0.36, 1) forwards;
+      animation-delay: var(--ring-delay, 1.1s);
+    }
+
+    /* =========================================================
+       AŞAMA 4: PEMBE AMBALAJ KAĞIDININ SARILMASI (2.0s - 2.95s)
+       ========================================================= */
+    @keyframes wrapBackPaper {
+      0% {
+        transform: translateY(45px) scale(0.45);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0px) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes wrapLeftFlap {
+      0% {
+        transform: rotate(-24deg) scale(0.55);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes wrapRightFlap {
+      0% {
+        transform: rotate(24deg) scale(0.55);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes wrapFrontFoldLeft {
+      0% {
+        transform: rotate(-32deg) translateY(25px) scale(0.75);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(0deg) translateY(0px) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes wrapFrontFoldRight {
+      0% {
+        transform: rotate(32deg) translateY(25px) scale(0.75);
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(0deg) translateY(0px) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes wrapBottomCone {
+      0% {
+        transform: scaleY(0.2) translateY(-30px);
+        opacity: 0;
+      }
+      100% {
+        transform: scaleY(1) translateY(0px);
+        opacity: 1;
+      }
+    }
+
+    .paper-back-anim {
+      transform-origin: 400px 560px;
+      opacity: 0;
+      animation: wrapBackPaper 0.72s cubic-bezier(0.22, 1, 0.36, 1) 1.95s forwards;
+    }
+
+    .paper-left-flap-anim {
+      transform-origin: 395px 635px;
+      opacity: 0;
+      animation: wrapLeftFlap 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.12s forwards;
+    }
+
+    .paper-right-flap-anim {
+      transform-origin: 405px 635px;
+      opacity: 0;
+      animation: wrapRightFlap 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.22s forwards;
+    }
+
+    .paper-cone-anim {
+      transform-origin: 400px 605px;
+      opacity: 0;
+      animation: wrapBottomCone 0.65s cubic-bezier(0.22, 1, 0.36, 1) 2.28s forwards;
+    }
+
+    .paper-fold-left-anim {
+      transform-origin: 410px 605px;
+      opacity: 0;
+      animation: wrapFrontFoldLeft 0.72s cubic-bezier(0.22, 1, 0.36, 1) 2.42s forwards;
+    }
+
+    .paper-fold-right-anim {
+      transform-origin: 390px 605px;
+      opacity: 0;
+      animation: wrapFrontFoldRight 0.72s cubic-bezier(0.22, 1, 0.36, 1) 2.54s forwards;
+    }
+
+    /* =========================================================
+       AŞAMA 5: BEYAZ SATEN KURDELENİN BAĞLANMASI (2.7s - 3.55s)
+       ========================================================= */
+    @keyframes popBowLoopLeft {
+      0% {
+        transform: scale(0.1) rotate(22deg);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes popBowLoopRight {
+      0% {
+        transform: scale(0.1) rotate(-22deg);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes cinchKnot {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.18);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes unfurlTail {
+      0% {
+        transform: scaleY(0.05) scaleX(0.6);
+        opacity: 0;
+      }
+      100% {
+        transform: scaleY(1) scaleX(1);
+        opacity: 1;
+      }
+    }
+
+    .bow-loop-left-anim {
+      transform-origin: 392px 600px;
+      opacity: 0;
+      animation: popBowLoopLeft 0.62s cubic-bezier(0.34, 1.56, 0.64, 1) 2.82s forwards;
+    }
+
+    .bow-loop-right-anim {
+      transform-origin: 404px 600px;
+      opacity: 0;
+      animation: popBowLoopRight 0.62s cubic-bezier(0.34, 1.56, 0.64, 1) 2.88s forwards;
+    }
+
+    .bow-knot-anim {
+      transform-origin: 398px 599px;
+      opacity: 0;
+      animation: cinchKnot 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) 2.75s forwards;
+    }
+
+    .bow-tail-enter-left {
+      transform-origin: 388px 604px;
+      opacity: 0;
+      animation: unfurlTail 0.68s cubic-bezier(0.22, 1, 0.36, 1) 3.02s forwards;
+    }
+
+    .bow-tail-enter-right {
+      transform-origin: 408px 604px;
+      opacity: 0;
+      animation: unfurlTail 0.68s cubic-bezier(0.22, 1, 0.36, 1) 3.08s forwards;
+    }
+
+    /* =========================================================
+       AŞAMA 6: SÜREKLİ RÜZGAR ESİNTİSİ VE PARILTI DÖNGÜSÜ
+       ========================================================= */
+    @keyframes swayTopFlower {
+      0%, 100% {
+        transform: rotate(-1.6deg) translateY(0px);
+      }
+      50% {
+        transform: rotate(2.1deg) translateY(-2.5px);
+      }
+    }
+
+    @keyframes swayLeftFlower {
+      0%, 100% {
+        transform: rotate(-2.2deg) translate(0px, 0px);
+      }
+      50% {
+        transform: rotate(1.7deg) translate(2px, -1.5px);
+      }
+    }
+
+    @keyframes swayRightFlower {
+      0%, 100% {
+        transform: rotate(-1.5deg) translate(0px, 0px);
+      }
+      50% {
+        transform: rotate(2.4deg) translate(2.5px, -2px);
+      }
+    }
+
+    @keyframes swayLeafSlow {
+      0%, 100% {
+        transform: rotate(-2.8deg);
+      }
+      50% {
+        transform: rotate(3.2deg);
+      }
+    }
+
+    @keyframes swayLeafFast {
+      0%, 100% {
+        transform: rotate(2.5deg);
+      }
+      50% {
+        transform: rotate(-3.4deg);
+      }
+    }
+
+    @keyframes ribbonLeftSway {
+      0%, 100% {
+        transform: rotate(0deg) skewX(0deg);
+      }
+      50% {
+        transform: rotate(2.8deg) skewX(-1.4deg);
+      }
+    }
+
+    @keyframes ribbonRightSway {
+      0%, 100% {
+        transform: rotate(0deg) skewX(0deg);
+      }
+      50% {
+        transform: rotate(-2.4deg) skewX(1.6deg);
+      }
+    }
+
+    @keyframes petalBreathe {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        transform: scale(1.016) rotate(0.9deg);
+      }
+    }
+
+    @keyframes sparkleAppearAndTwinkle {
+      0% {
+        opacity: 0;
+        transform: scale(0);
+      }
+      14% {
+        opacity: 1;
+        transform: scale(1.18);
+      }
+      55% {
+        opacity: 0.42;
+        transform: scale(0.84);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes twinkleStarLoop {
+      0%, 100% {
+        opacity: 0.42;
+        transform: scale(0.84);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.14);
+      }
+    }
+
+    /* Katman Dönüş Merkezleri */
+    .flower-top-group {
+      transform-origin: 415px 410px;
+      animation: swayTopFlower 5.8s ease-in-out 2.2s infinite;
+    }
+
+    .flower-left-group {
+      transform-origin: 355px 460px;
+      animation: swayLeftFlower 5.1s ease-in-out 2.4s infinite;
+    }
+
+    .flower-right-group {
+      transform-origin: 465px 475px;
+      animation: swayRightFlower 5.5s ease-in-out 2.6s infinite;
+    }
+
+    .petal-outer-ring {
+      animation: petalBreathe 4.6s ease-in-out 2.5s infinite;
+    }
+
+    .leaf-sway-a {
+      animation: swayLeafSlow 4.4s ease-in-out 1.4s infinite;
+    }
+
+    .leaf-sway-b {
+      animation: swayLeafFast 3.9s ease-in-out 1.5s infinite;
+    }
+
+    .ribbon-tail-left {
+      transform-origin: 382px 605px;
+      animation: ribbonLeftSway 4.8s ease-in-out 3.6s infinite;
+    }
+
+    .ribbon-tail-right {
+      transform-origin: 418px 605px;
+      animation: ribbonRightSway 5.2s ease-in-out 3.7s infinite;
+    }
+
+    .sparkle-item {
+      opacity: 0;
+      animation:
+        sparkleAppearAndTwinkle 1.6s cubic-bezier(0.22, 1, 0.36, 1) var(--appear-delay, 3.2s) forwards,
+        twinkleStarLoop var(--dur, 3.4s) ease-in-out calc(var(--appear-delay, 3.2s) + 1.6s) infinite;
+    }
+
+    /* Hafif Etkileşimli Rüzgar Katmanı */
+    #wind-sway-wrapper {
+      transform-origin: 400px 790px;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    /* Tekrar Oynat Butonu */
+    .replay-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 192, 222, 0.25);
+      color: #fce7f3;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .replay-btn:hover {
+      background: rgba(244, 114, 182, 0.22);
+      border-color: rgba(255, 192, 222, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .replay-btn:active {
+      transform: scale(0.96);
+    }
+
+    .replay-btn svg {
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .replay-btn:hover svg {
+      transform: rotate(-180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="bouquet-stage" id="stage" title="Rüzgar esintisi göndermek için dokunun veya fareyi hareket ettirin">
+    <svg id="bouquet-svg" viewBox="0 -72 800 912" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Parıltı Filtresi -->
+        <filter id="starGlow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="4.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        <!-- Yumuşak Gölgeler -->
+        <filter id="softDropShadow" x="-25%" y="-25%" width="150%" height="150%">
+          <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#190410" flood-opacity="0.45" />
+        </filter>
+
+        <filter id="paperFoldShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="-4" stdDeviation="7" flood-color="#7a1c46" flood-opacity="0.35" />
+        </filter>
+
+        <filter id="ribbonShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#4d102c" flood-opacity="0.42" />
+        </filter>
+
+        <!-- Ambalaj Kağıdı Gradyanları -->
+        <linearGradient id="paperBackInner" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f9a7c7" />
+          <stop offset="50%" stop-color="#e56e9e" />
+          <stop offset="100%" stop-color="#b94274" />
+        </linearGradient>
+
+        <linearGradient id="paperDeepCavity" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%" stop-color="#9e315f" />
+          <stop offset="60%" stop-color="#6b1b3e" />
+          <stop offset="100%" stop-color="#470f28" />
+        </linearGradient>
+
+        <linearGradient id="paperLeftFlap" x1="0%" y1="15%" x2="95%" y2="85%">
+          <stop offset="0%" stop-color="#ffbfd8" />
+          <stop offset="28%" stop-color="#f68cb7" />
+          <stop offset="78%" stop-color="#e36498" />
+          <stop offset="100%" stop-color="#bf4275" />
+        </linearGradient>
+
+        <linearGradient id="paperRightFlap" x1="100%" y1="15%" x2="5%" y2="85%">
+          <stop offset="0%" stop-color="#ffc4dc" />
+          <stop offset="32%" stop-color="#f484b1" />
+          <stop offset="80%" stop-color="#dc5b90" />
+          <stop offset="100%" stop-color="#b5396c" />
+        </linearGradient>
+
+        <linearGradient id="paperFrontLeftFold" x1="15%" y1="0%" x2="85%" y2="100%">
+          <stop offset="0%" stop-color="#ffb8d4" />
+          <stop offset="40%" stop-color="#f07ca9" />
+          <stop offset="100%" stop-color="#c94b7e" />
+        </linearGradient>
+
+        <linearGradient id="paperFrontRightFold" x1="85%" y1="0%" x2="15%" y2="100%">
+          <stop offset="0%" stop-color="#ffc0d9" />
+          <stop offset="45%" stop-color="#ee78a6" />
+          <stop offset="100%" stop-color="#be4174" />
+        </linearGradient>
+
+        <linearGradient id="paperBottomCone" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stop-color="#f68cb7" />
+          <stop offset="55%" stop-color="#e6679b" />
+          <stop offset="100%" stop-color="#bd3f72" />
+        </linearGradient>
+
+        <!-- Yaprak ve Sap Gradyanları -->
+        <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#1e5c26" />
+          <stop offset="50%" stop-color="#378a3e" />
+          <stop offset="100%" stop-color="#194a1f" />
+        </linearGradient>
+
+        <linearGradient id="leafLightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#58b353" />
+          <stop offset="55%" stop-color="#338236" />
+          <stop offset="100%" stop-color="#1c5220" />
+        </linearGradient>
+
+        <linearGradient id="leafDarkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#17441b" />
+          <stop offset="60%" stop-color="#2a6e2d" />
+          <stop offset="100%" stop-color="#439642" />
+        </linearGradient>
+
+        <!-- Saten Kurdele Gradyanları -->
+        <linearGradient id="satinLoopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="35%" stop-color="#f1ecf5" />
+          <stop offset="72%" stop-color="#cfc5d9" />
+          <stop offset="100%" stop-color="#a89bb5" />
+        </linearGradient>
+
+        <linearGradient id="satinLoopInner" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#9e90ac" />
+          <stop offset="50%" stop-color="#cbc0d6" />
+          <stop offset="100%" stop-color="#ece6f2" />
+        </linearGradient>
+
+        <linearGradient id="satinTailGrad" x1="15%" y1="0%" x2="85%" y2="100%">
+          <stop offset="0%" stop-color="#d8cfe0" />
+          <stop offset="28%" stop-color="#ffffff" />
+          <stop offset="65%" stop-color="#ebe5f0" />
+          <stop offset="100%" stop-color="#c3b7cf" />
+        </linearGradient>
+
+        <radialGradient id="knotGrad" cx="38%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="55%" stop-color="#e8e1ef" />
+          <stop offset="100%" stop-color="#b4a7c2" />
+        </radialGradient>
+
+        <!-- Parıltı Yıldız Gradyanı -->
+        <radialGradient id="sparkleCore" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+          <stop offset="45%" stop-color="#ffd9f0" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#ff85c8" stop-opacity="0" />
+        </radialGradient>
+
+        <!-- Happy Birthday Yazı Gradyanı ve Işıltısı -->
+        <linearGradient id="birthdayTextGrad" x1="0%" y1="0%" x2="100%" y2="15%">
+          <stop offset="0%" stop-color="#ffd6ec" />
+          <stop offset="32%" stop-color="#fff8fc" />
+          <stop offset="68%" stop-color="#ffe7c7" />
+          <stop offset="100%" stop-color="#e5ccff" />
+        </linearGradient>
+
+        <filter id="birthdayTextGlow" x="-35%" y="-45%" width="170%" height="190%">
+          <feGaussianBlur stdDeviation="5.5" result="softGlow" />
+          <feFlood flood-color="#ff8ec9" flood-opacity="0.65" result="glowColor" />
+          <feComposite in="glowColor" in2="softGlow" operator="in" result="coloredGlow" />
+          <feMerge>
+            <feMergeNode in="coloredGlow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Buketin Üstünde Taç Gibi Süzülen Happy Birthday Yazısı -->
+      <g id="birthday-banner" class="birthday-title-enter">
+        <g class="birthday-title-float">
+          <!-- Zarif Kavisli Alt Süs Çizgisi ve Orta Parıltı -->
+          <path d="M 245 -6 Q 400 12 555 -6"
+                stroke="url(#birthdayTextGrad)"
+                stroke-width="1.35"
+                stroke-linecap="round"
+                fill="none"
+                opacity="0.58" />
+          <circle cx="400" cy="3" r="2.6" fill="#fff5fb" filter="url(#starGlow)" opacity="0.9" />
+
+          <!-- Ana Kaligrafik Metin -->
+          <text x="400" y="-20"
+                class="birthday-script-text"
+                fill="url(#birthdayTextGrad)"
+                filter="url(#birthdayTextGlow)">
+            Happy Birthday
+          </text>
+        </g>
+      </g>
+
+      <!-- Rüzgar Esintisiyle Hafifçe Eğilen Ana Buket Grubu -->
+      <g id="wind-sway-wrapper">
+        <!-- 1. ARKA AMBALAJ KAĞIDI KANATLARI -->
+        <g id="back-wrapping-paper" class="paper-back-anim">
+          <!-- Sol Üst Arka Kanat -->
+          <path d="M 192 265 Q 204 185 215 140 Q 305 170 390 225 L 365 445 L 200 350 Z"
+                fill="url(#paperBackInner)" />
+          <!-- Sağ Üst Arka Kanat -->
+          <path d="M 628 212 Q 520 222 435 255 L 435 455 L 605 365 Q 622 285 628 212 Z"
+                fill="url(#paperBackInner)" />
+          <!-- İç Derin Gölge Alanı -->
+          <path d="M 195 280 Q 400 225 615 275 L 520 510 L 400 570 L 285 510 Z"
+                fill="url(#paperDeepCavity)" />
+        </g>
+
+        <!-- 2. SAP VE YAPRAKLAR (Aşağıdan Yukarı Çizilerek Büyür) -->
+        <g id="stems-and-foliage">
+          <path class="stem-path" style="--stem-delay: 0.00s;"
+                d="M 404 565 Q 412 375 418 215"
+                stroke="url(#stemGrad)" stroke-width="11" stroke-linecap="round" fill="none" />
+          <path class="stem-path" style="--stem-delay: 0.12s;"
+                d="M 398 565 Q 368 425 322 315"
+                stroke="url(#stemGrad)" stroke-width="9.5" stroke-linecap="round" fill="none" />
+          <path class="stem-path" style="--stem-delay: 0.22s;"
+                d="M 412 565 Q 465 450 522 355"
+                stroke="url(#stemGrad)" stroke-width="9.5" stroke-linecap="round" fill="none" />
+          <path class="stem-path" style="--stem-delay: 0.16s;"
+                d="M 402 565 Q 392 455 378 360"
+                stroke="url(#stemGrad)" stroke-width="7.5" stroke-linecap="round" fill="none" />
+          <path class="stem-path" style="--stem-delay: 0.26s;"
+                d="M 408 565 Q 435 440 462 340"
+                stroke="url(#stemGrad)" stroke-width="7.5" stroke-linecap="round" fill="none" />
+
+          <!-- Prosedürel Krizantem Yaprakları Buraya Eklenecek -->
+          <g id="foliage-leaves"></g>
+        </g>
+
+        <!-- 3. ÜÇ BÜYÜK KRİZANTEM ÇİÇEĞİ (İçten Dışa Yaprak Yaprak Açar) -->
+        <!-- Üst Mor Çiçek -->
+        <g class="flower-top-group" filter="url(#softDropShadow)">
+          <g id="flower-purple" transform="translate(418, 178)"></g>
+        </g>
+
+        <!-- Sol Pembe Çiçek -->
+        <g class="flower-left-group" filter="url(#softDropShadow)">
+          <g id="flower-pink" transform="translate(314, 304)"></g>
+        </g>
+
+        <!-- Sağ Mavi Çiçek -->
+        <g class="flower-right-group" filter="url(#softDropShadow)">
+          <g id="flower-blue" transform="translate(524, 344)"></g>
+        </g>
+
+        <!-- 4. ÖN AMBALAJ KAĞIDI KATMANLARI -->
+        <g id="front-wrapping-paper">
+          <!-- Sol Büyük Dış Koni Kanadı -->
+          <g class="paper-left-flap-anim">
+            <path d="M 112 288
+                     C 155 268, 225 340, 325 455
+                     L 442 612
+                     L 372 645
+                     C 272 545, 162 405, 112 288 Z"
+                  fill="url(#paperLeftFlap)" />
+            <path d="M 112 288 C 162 405, 272 545, 372 645"
+                  stroke="#ffd6e7" stroke-width="2.2" fill="none" opacity="0.85" />
+          </g>
+
+          <!-- Sağ Büyük Dış Koni Kanadı -->
+          <g class="paper-right-flap-anim">
+            <path d="M 672 292
+                     C 628 272, 558 345, 458 460
+                     L 352 612
+                     L 422 645
+                     C 520 545, 622 405, 672 292 Z"
+                  fill="url(#paperRightFlap)" />
+            <path d="M 672 292 C 622 405, 520 545, 422 645"
+                  stroke="#ffd9e9" stroke-width="2.2" fill="none" opacity="0.85" />
+          </g>
+
+          <!-- Alt Sivri Koni Tabanı -->
+          <g class="paper-cone-anim">
+            <path d="M 332 605 L 462 605 L 403 786 Q 397 796 391 786 Z"
+                  fill="url(#paperBottomCone)" />
+            <path d="M 402 605 L 426 605 L 399 788 Q 412 695 402 605 Z"
+                  fill="#9e2f5e" opacity="0.45" />
+          </g>
+
+          <!-- Orta Sol Katlı Yaka Kıvrımı -->
+          <g class="paper-fold-left-anim">
+            <path d="M 192 414
+                     C 265 426, 368 475, 434 548
+                     L 398 618
+                     C 315 562, 232 490, 192 414 Z"
+                  fill="url(#paperFrontLeftFold)" filter="url(#paperFoldShadow)" />
+            <path d="M 192 414 C 265 426, 368 475, 434 548"
+                  stroke="#ffd4e6" stroke-width="2" fill="none" opacity="0.9" />
+          </g>
+
+          <!-- Orta Sağ Üstteki Katlı Yaka Kıvrımı -->
+          <g class="paper-fold-right-anim">
+            <path d="M 604 405
+                     C 525 420, 425 470, 364 555
+                     L 398 622
+                     C 482 565, 565 485, 604 405 Z"
+                  fill="url(#paperFrontRightFold)" filter="url(#paperFoldShadow)" />
+            <path d="M 604 405 C 525 420, 425 470, 364 555"
+                  stroke="#ffd8e8" stroke-width="2.2" fill="none" opacity="0.92" />
+          </g>
+        </g>
+
+        <!-- 5. BEYAZ SATEN KURDELE VE FİYONK -->
+        <g id="satin-ribbon" filter="url(#ribbonShadow)">
+          <!-- Sol Kurdele Kuyruğu -->
+          <g class="bow-tail-enter-left">
+            <g class="ribbon-tail-left">
+              <path d="M 388 602
+                       C 350 638, 305 685, 244 708
+                       L 278 726
+                       L 266 756
+                       C 326 738, 372 685, 400 616 Z"
+                    fill="url(#satinTailGrad)" />
+              <path d="M 386 607 C 348 644, 308 690, 256 713"
+                    stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.75" />
+            </g>
+          </g>
+
+          <!-- Sağ Kurdele Kuyruğu -->
+          <g class="bow-tail-enter-right">
+            <g class="ribbon-tail-right">
+              <path d="M 408 602
+                       C 446 642, 492 695, 554 716
+                       L 520 734
+                       L 524 766
+                       C 464 742, 422 686, 396 616 Z"
+                    fill="url(#satinTailGrad)" />
+              <path d="M 412 608 C 448 648, 490 698, 542 720"
+                    stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.75" />
+            </g>
+          </g>
+
+          <!-- Fiyonk Sol Kanat (Arka + Ön) -->
+          <g class="bow-loop-left-anim">
+            <path d="M 392 595 C 345 568, 290 578, 294 610 C 298 634, 348 625, 392 608 Z"
+                  fill="url(#satinLoopInner)" />
+            <path d="M 392 594
+                     C 340 554, 276 558, 282 602
+                     C 287 636, 346 624, 392 606 Z"
+                  fill="url(#satinLoopGrad)" />
+            <path d="M 386 597 C 344 574, 304 576, 292 596"
+                  stroke="#ffffff" stroke-width="2.2" fill="none" opacity="0.85" />
+          </g>
+
+          <!-- Fiyonk Sağ Kanat (Arka + Ön) -->
+          <g class="bow-loop-right-anim">
+            <path d="M 404 595 C 451 568, 506 578, 502 610 C 498 634, 448 625, 404 608 Z"
+                  fill="url(#satinLoopInner)" />
+            <path d="M 404 594
+                     C 456 554, 520 558, 514 602
+                     C 509 636, 450 624, 404 606 Z"
+                  fill="url(#satinLoopGrad)" />
+            <path d="M 410 597 C 452 574, 492 576, 504 596"
+                  stroke="#ffffff" stroke-width="2.2" fill="none" opacity="0.85" />
+          </g>
+
+          <!-- Fiyonk Orta Düğümü -->
+          <g class="bow-knot-anim">
+            <rect x="383" y="585" width="30" height="28" rx="10" ry="10" fill="url(#knotGrad)" />
+            <path d="M 388 591 Q 398 588 408 591" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9" />
+          </g>
+        </g>
+      </g>
+
+      <!-- 6. PARILTILI YILDIZLAR VE IŞIK NOKTALARI -->
+      <g id="sparkles-layer"></g>
+    </svg>
+  </div>
+
+  <!-- Oluşum Animasyonunu Sıfırdan Başlatan Buton -->
+  <button id="replay-btn" class="replay-btn" type="button" aria-label="Animasyonu tekrar oynat">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+    </svg>
+    <span>Tekrar Oynat</span>
+  </button>
+
+  <script>
+    (function () {
+      const SVG_NS = "http://www.w3.org/2000/svg";
+
+      function createSvgElement(tag, attrs = {}) {
+        const el = document.createElementNS(SVG_NS, tag);
+        for (const [key, val] of Object.entries(attrs)) {
+          el.setAttribute(key, val);
+        }
+        return el;
+      }
+
+      /**
+       * Çok katmanlı krizantem çiçeği oluşturucu
+       * Dış halkalar altta çizilir, ancak animasyon gecikmesi içten dışa doğru ayarlanır;
+       * böylece çiçek tomurcuktan dışa doğru katman katman açılır.
+       */
+      function buildChrysanthemum(container, config) {
+        container.innerHTML = "";
+        const defs = document.querySelector("#bouquet-svg defs");
+        const gradId = `petalGrad_${config.id}`;
+
+        const existingGrad = document.getElementById(gradId);
+        if (existingGrad) existingGrad.remove();
+
+        const grad = createSvgElement("linearGradient", {
+          id: gradId,
+          x1: "0%",
+          y1: "100%",
+          x2: "0%",
+          y2: "0%"
+        });
+        grad.appendChild(createSvgElement("stop", { offset: "0%", "stop-color": config.baseDark }));
+        grad.appendChild(createSvgElement("stop", { offset: "42%", "stop-color": config.midColor }));
+        grad.appendChild(createSvgElement("stop", { offset: "82%", "stop-color": config.tipColor }));
+        grad.appendChild(createSvgElement("stop", { offset: "100%", "stop-color": config.highlightTip }));
+        defs.appendChild(grad);
+
+        let seed = config.seed;
+        function rand() {
+          seed = (seed * 16807) % 2147483647;
+          return (seed - 1) / 2147483646;
+        }
+
+        const rings = [
+          { count: 32, len: config.radius * 1.02, width: config.petalW * 1.05, outer: true },
+          { count: 30, len: config.radius * 0.90, width: config.petalW * 1.00, outer: true },
+          { count: 28, len: config.radius * 0.78, width: config.petalW * 0.94, outer: false },
+          { count: 24, len: config.radius * 0.65, width: config.petalW * 0.88, outer: false },
+          { count: 20, len: config.radius * 0.52, width: config.petalW * 0.80, outer: false },
+          { count: 16, len: config.radius * 0.39, width: config.petalW * 0.72, outer: false },
+          { count: 12, len: config.radius * 0.27, width: config.petalW * 0.62, outer: false },
+          { count: 8,  len: config.radius * 0.16, width: config.petalW * 0.52, outer: false }
+        ];
+
+        const totalRings = rings.length;
+
+        rings.forEach((ring, ringIndex) => {
+          // İç halkalar (ringIndex yüksek) daha erken, dış halkalar (ringIndex düşük) daha sonra açılır
+          const innerToOuterOrder = totalRings - 1 - ringIndex;
+          const ringOpenDelay = (config.bloomStart + innerToOuterOrder * 0.068).toFixed(3);
+
+          const bloomWrapper = createSvgElement("g", {
+            class: "bloom-ring-enter",
+            style: `--ring-delay: ${ringOpenDelay}s;`
+          });
+
+          const swayRingGroup = createSvgElement("g", {
+            class: ring.outer ? "petal-outer-ring" : "",
+            style: ring.outer ? `animation-delay: ${(2.4 + ringIndex * 0.35 + config.phase).toFixed(2)}s;` : ""
+          });
+
+          for (let i = 0; i < ring.count; i++) {
+            const baseAngle = (360 / ring.count) * i + ringIndex * 11.5;
+            const jitterAngle = (rand() - 0.5) * 5.2;
+            const angle = baseAngle + jitterAngle;
+
+            const rad = (angle * Math.PI) / 180;
+            const perspectiveScale = 1 - 0.08 * Math.abs(Math.sin(rad));
+            const length = ring.len * perspectiveScale * (0.93 + rand() * 0.13);
+            const width = ring.width * (0.92 + rand() * 0.15);
+            const curveBend = (rand() - 0.5) * width * 0.95;
+
+            const petalHolder = createSvgElement("g", {
+              transform: `rotate(${angle.toFixed(2)})`
+            });
+
+            const d = `
+              M 0, 2
+              C ${-width * 0.62}, ${-length * 0.26}
+                ${-width * 0.52 + curveBend * 0.4}, ${-length * 0.72}
+                ${curveBend}, ${-length}
+              C ${width * 0.52 + curveBend * 0.4}, ${-length * 0.72}
+                ${width * 0.62}, ${-length * 0.26}
+                0, 2 Z
+            `;
+
+            const petal = createSvgElement("path", {
+              d,
+              fill: `url(#${gradId})`,
+              stroke: config.strokeColor,
+              "stroke-width": "0.65",
+              "stroke-opacity": "0.55"
+            });
+
+            const vein = createSvgElement("path", {
+              d: `M 0, -4 Q ${curveBend * 0.45}, ${-length * 0.52} ${curveBend * 0.92}, ${-length * 0.92}`,
+              stroke: config.highlightTip,
+              "stroke-width": "0.85",
+              "stroke-linecap": "round",
+              fill: "none",
+              opacity: "0.42"
+            });
+
+            petalHolder.appendChild(petal);
+            petalHolder.appendChild(vein);
+            swayRingGroup.appendChild(petalHolder);
+          }
+
+          bloomWrapper.appendChild(swayRingGroup);
+          container.appendChild(bloomWrapper);
+        });
+
+        // Merkez tomurcuk çekirdeği
+        const coreGroup = createSvgElement("g", {
+          class: "bloom-ring-enter",
+          style: `--ring-delay: ${config.bloomStart.toFixed(3)}s;`
+        });
+
+        const centerCore = createSvgElement("circle", {
+          cx: "0",
+          cy: "0",
+          r: (config.radius * 0.085).toFixed(1),
+          fill: config.baseDark,
+          opacity: "0.85"
+        });
+
+        coreGroup.appendChild(centerCore);
+        container.appendChild(coreGroup);
+      }
+
+      /**
+       * Krizantem tırtıklı yeşil yaprakları oluşturur (Aşama 2'de filizlenir)
+       */
+      function buildFoliage() {
+        const foliageGroup = document.getElementById("foliage-leaves");
+        foliageGroup.innerHTML = "";
+
+        const leavesData = [
+          { x: 545, y: 245, rot: 36,  scale: 1.05, grad: "leafLightGrad", cls: "leaf-sway-a", delay: 0.72 },
+          { x: 562, y: 278, rot: 62,  scale: 0.98, grad: "leafDarkGrad",  cls: "leaf-sway-b", delay: 0.80 },
+          { x: 392, y: 395, rot: -32, scale: 0.92, grad: "leafLightGrad", cls: "leaf-sway-a", delay: 0.62 },
+          { x: 422, y: 405, rot: 28,  scale: 0.88, grad: "leafDarkGrad",  cls: "leaf-sway-b", delay: 0.68 },
+          { x: 405, y: 448, rot: -18, scale: 0.82, grad: "leafLightGrad", cls: "leaf-sway-a", delay: 0.56 },
+          { x: 448, y: 462, rot: 45,  scale: 0.86, grad: "leafLightGrad", cls: "leaf-sway-b", delay: 0.64 },
+          { x: 278, y: 396, rot: -58, scale: 0.95, grad: "leafDarkGrad",  cls: "leaf-sway-b", delay: 0.76 },
+          { x: 332, y: 432, rot: -42, scale: 0.85, grad: "leafLightGrad", cls: "leaf-sway-a", delay: 0.66 },
+          { x: 362, y: 472, rot: -26, scale: 0.80, grad: "leafDarkGrad",  cls: "leaf-sway-b", delay: 0.58 },
+          { x: 478, y: 482, rot: 38,  scale: 0.82, grad: "leafDarkGrad",  cls: "leaf-sway-a", delay: 0.70 }
+        ];
+
+        const leafPath = `
+          M 0, 0
+          C -10, -12 -24, -14 -28, -24
+          C -18, -26 -14, -32 -24, -40
+          C -12, -42 -10, -52 -16, -62
+          C -6, -64 -2, -74 0, -84
+          C 2, -74 6, -64 16, -62
+          C 10, -52 12, -42 24, -40
+          C 14, -32 18, -26 28, -24
+          C 24, -14 10, -12 0, 0 Z
+        `;
+
+        leavesData.forEach((leaf) => {
+          const holder = createSvgElement("g", {
+            transform: `translate(${leaf.x}, ${leaf.y}) rotate(${leaf.rot}) scale(${leaf.scale})`
+          });
+
+          const sproutWrapper = createSvgElement("g", {
+            class: "leaf-sprout-wrapper",
+            style: `--leaf-delay: ${leaf.delay}s;`
+          });
+
+          const swayWrapper = createSvgElement("g", {
+            class: leaf.cls
+          });
+
+          const path = createSvgElement("path", {
+            d: leafPath,
+            fill: `url(#${leaf.grad})`,
+            stroke: "#153d18",
+            "stroke-width": "0.9"
+          });
+
+          const midrib = createSvgElement("path", {
+            d: "M 0, -2 L 0, -76 M 0, -24 L -16, -34 M 0, -28 L 16, -36 M 0, -46 L -11, -55 M 0, -48 L 11, -56",
+            stroke: "#6fd169",
+            "stroke-width": "1.1",
+            "stroke-linecap": "round",
+            fill: "none",
+            opacity: "0.55"
+          });
+
+          swayWrapper.appendChild(path);
+          swayWrapper.appendChild(midrib);
+          sproutWrapper.appendChild(swayWrapper);
+          holder.appendChild(sproutWrapper);
+          foliageGroup.appendChild(holder);
+        });
+      }
+
+      /**
+       * Parıltılı dört köşeli yıldızlar ve ışık noktaları (Aşama 6'da belirir)
+       */
+      function buildSparkles() {
+        const layer = document.getElementById("sparkles-layer");
+        layer.innerHTML = "";
+
+        const stars = [
+          { x: 262, y: 52,  size: 22, dur: 3.6, appear: 3.15 },
+          { x: 632, y: 146, size: 28, dur: 4.1, appear: 3.28 },
+          { x: 138, y: 452, size: 26, dur: 3.8, appear: 3.40 },
+          { x: 642, y: 518, size: 26, dur: 4.3, appear: 3.52 },
+          { x: 222, y: 562, size: 16, dur: 3.1, appear: 3.62 },
+          { x: 595, y: 572, size: 12, dur: 2.9, appear: 3.70 },
+          { x: 225, y: -34, size: 15, dur: 3.5, appear: 3.55 },
+          { x: 575, y: -32, size: 16, dur: 3.9, appear: 3.65 }
+        ];
+
+        const dots = [
+          { x: 210, y: 92,  r: 2.8, dur: 2.8, appear: 3.20 },
+          { x: 164, y: 138, r: 3.2, dur: 3.4, appear: 3.30 },
+          { x: 100, y: 238, r: 2.2, dur: 2.6, appear: 3.38 },
+          { x: 92,  y: 325, r: 2.8, dur: 3.5, appear: 3.45 },
+          { x: 124, y: 392, r: 2.1, dur: 2.7, appear: 3.50 },
+          { x: 196, y: 498, r: 2.5, dur: 3.2, appear: 3.58 },
+          { x: 168, y: 552, r: 2.0, dur: 2.5, appear: 3.66 },
+          { x: 604, y: 74,  r: 3.2, dur: 3.3, appear: 3.24 },
+          { x: 698, y: 232, r: 2.2, dur: 2.9, appear: 3.36 },
+          { x: 706, y: 416, r: 2.5, dur: 3.1, appear: 3.48 },
+          { x: 676, y: 468, r: 2.0, dur: 2.6, appear: 3.60 }
+        ];
+
+        stars.forEach((s) => {
+          const g = createSvgElement("g", {
+            transform: `translate(${s.x}, ${s.y})`
+          });
+          const inner = createSvgElement("g", {
+            class: "sparkle-item",
+            style: `--dur: ${s.dur}s; --appear-delay: ${s.appear}s;`,
+            filter: "url(#starGlow)"
+          });
+
+          const halo = createSvgElement("circle", {
+            cx: "0",
+            cy: "0",
+            r: (s.size * 0.65).toFixed(1),
+            fill: "url(#sparkleCore)",
+            opacity: "0.7"
+          });
+
+          const rOuter = s.size;
+          const rInner = s.size * 0.16;
+          const starPath = `
+            M 0,${-rOuter}
+            Q ${rInner * 0.4},${-rInner * 0.4} ${rOuter},0
+            Q ${rInner * 0.4},${rInner * 0.4} 0,${rOuter}
+            Q ${-rInner * 0.4},${rInner * 0.4} ${-rOuter},0
+            Q ${-rInner * 0.4},${-rInner * 0.4} 0,${-rOuter} Z
+          `;
+
+          const starShape = createSvgElement("path", {
+            d: starPath,
+            fill: "#fff5fb"
+          });
+
+          inner.appendChild(halo);
+          inner.appendChild(starShape);
+          g.appendChild(inner);
+          layer.appendChild(g);
+        });
+
+        dots.forEach((d) => {
+          const g = createSvgElement("g", {
+            transform: `translate(${d.x}, ${d.y})`
+          });
+          const circle = createSvgElement("circle", {
+            cx: "0",
+            cy: "0",
+            r: d.r,
+            fill: "#ffd6ee",
+            class: "sparkle-item",
+            style: `--dur: ${d.dur}s; --appear-delay: ${d.appear}s;`,
+            filter: "url(#starGlow)"
+          });
+          g.appendChild(circle);
+          layer.appendChild(g);
+        });
+      }
+
+      function renderAllBouquetParts() {
+        // 1. Üst Mor Çiçek (0.95s'de merkezden dışa açmaya başlar)
+        buildChrysanthemum(document.getElementById("flower-purple"), {
+          id: "purple",
+          radius: 166,
+          petalW: 16.5,
+          baseDark: "#451e7d",
+          midColor: "#7e46c9",
+          tipColor: "#b486f2",
+          highlightTip: "#e6d4ff",
+          strokeColor: "#331261",
+          seed: 104729,
+          phase: 0.2,
+          bloomStart: 0.95
+        });
+
+        // 2. Sol Pembe Çiçek (1.18s'de açmaya başlar)
+        buildChrysanthemum(document.getElementById("flower-pink"), {
+          id: "pink",
+          radius: 146,
+          petalW: 15.2,
+          baseDark: "#9e244f",
+          midColor: "#e65584",
+          tipColor: "#ff8eb3",
+          highlightTip: "#ffd6e5",
+          strokeColor: "#781538",
+          seed: 224737,
+          phase: 1.5,
+          bloomStart: 1.18
+        });
+
+        // 3. Sağ Mavi Çiçek (1.38s'de açmaya başlar)
+        buildChrysanthemum(document.getElementById("flower-blue"), {
+          id: "blue",
+          radius: 138,
+          petalW: 14.5,
+          baseDark: "#1d4596",
+          midColor: "#467ee3",
+          tipColor: "#80b1ff",
+          highlightTip: "#cfe4ff",
+          strokeColor: "#14316e",
+          seed: 350377,
+          phase: 2.8,
+          bloomStart: 1.38
+        });
+
+        buildFoliage();
+        buildSparkles();
+      }
+
+      // İlk oluşturma
+      renderAllBouquetParts();
+
+      // Tekrar Oynat (0'dan oluşma animasyonunu sıfırlar)
+      const replayBtn = document.getElementById("replay-btn");
+      replayBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const svg = document.getElementById("bouquet-svg");
+        const parent = svg.parentNode;
+        const clone = svg.cloneNode(true);
+        parent.replaceChild(clone, svg);
+        renderAllBouquetParts();
+      });
+
+      // Etkileşimli Hafif Rüzgar Esintisi (Fare / Dokunma)
+      const stage = document.getElementById("stage");
+      let resetTimer = null;
+
+      function triggerGentleGust(clientX) {
+        const windWrapper = document.getElementById("wind-sway-wrapper");
+        if (!windWrapper) return;
+        const ratio = (clientX / window.innerWidth - 0.5) * 2;
+        const angle = (ratio * 3.2).toFixed(2);
+        windWrapper.style.transform = `rotate(${angle}deg)`;
+
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          const currentWrapper = document.getElementById("wind-sway-wrapper");
+          if (currentWrapper) currentWrapper.style.transform = "rotate(0deg)";
+        }, 1200);
+      }
+
+      stage.addEventListener("mousemove", (e) => {
+        triggerGentleGust(e.clientX);
+      });
+
+      stage.addEventListener("click", (e) => {
+        const windWrapper = document.getElementById("wind-sway-wrapper");
+        if (!windWrapper) return;
+        const gustDir = e.clientX < window.innerWidth / 2 ? 3.8 : -3.8;
+        windWrapper.style.transform = `rotate(${gustDir}deg)`;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          const currentWrapper = document.getElementById("wind-sway-wrapper");
+          if (currentWrapper) currentWrapper.style.transform = "rotate(0deg)";
+        }, 1400);
+      });
+
+      stage.addEventListener("touchstart", (e) => {
+        if (e.touches && e.touches[0]) {
+          triggerGentleGust(e.touches[0].clientX);
+        }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
