@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
@@ -37,6 +37,7 @@
       transform: translate(-50%, -50%);
       background: radial-gradient(circle, rgba(255, 140, 200, 0.22) 0%, rgba(170, 110, 255, 0.10) 38%, rgba(0, 0, 0, 0) 68%);
       animation: auraBreathe 7s ease-in-out infinite;
+      will-change: transform, opacity;
       pointer-events: none;
       z-index: 0;
     }
@@ -76,7 +77,6 @@
       background: linear-gradient(135deg, var(--pc1), var(--pc2));
       opacity: 0;
       animation: petalFall var(--pd, 14s) linear var(--pdelay, 4s) infinite;
-      filter: drop-shadow(0 0 4px rgba(255, 160, 210, 0.35));
     }
 
     @keyframes petalFall {
@@ -95,7 +95,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
     }
 
     svg#bouquet-svg {
@@ -104,14 +103,13 @@
       max-width: 100%;
       max-height: 100%;
       overflow: visible;
-      filter: drop-shadow(0 22px 44px rgba(255, 120, 190, 0.20));
     }
 
     /* ---------- BAŞLIK ---------- */
     @keyframes birthdayTitleReveal {
-      0% { opacity: 0; transform: translateY(16px) scale(0.9); filter: blur(6px); }
-      65% { opacity: 1; transform: translateY(-2px) scale(1.02); filter: blur(0px); }
-      100% { opacity: 1; transform: translateY(0px) scale(1); filter: blur(0px); }
+      0% { opacity: 0; transform: translateY(16px) scale(0.9) }
+      65% { opacity: 1; transform: translateY(-2px) scale(1.02) }
+      100% { opacity: 1; transform: translateY(0px) scale(1) }
     }
 
     @keyframes birthdayFloatBreeze {
@@ -126,13 +124,14 @@
     }
 
     .birthday-title-float {
+      will-change: transform;
       transform-origin: 400px -22px;
       animation: birthdayFloatBreeze 5.6s ease-in-out 4.5s infinite;
     }
 
     .birthday-script-text {
       font-family: 'Great Vibes', cursive;
-      font-size: 64px;
+      font-size: 62px;
       letter-spacing: 1.2px;
       text-anchor: middle;
     }
@@ -297,10 +296,10 @@
       50% { opacity: 1; }
     }
 
+    .flower-top-group, .flower-left-group, .flower-right-group, .ribbon-tail-left, .ribbon-tail-right, .sprig-sway { will-change: transform; }
     .flower-top-group { transform-origin: 415px 410px; animation: swayTopFlower 5.8s ease-in-out 2.2s infinite; }
     .flower-left-group { transform-origin: 355px 460px; animation: swayLeftFlower 5.1s ease-in-out 2.4s infinite; }
     .flower-right-group { transform-origin: 465px 475px; animation: swayRightFlower 5.5s ease-in-out 2.6s infinite; }
-    .petal-outer-ring { animation: petalBreathe 4.6s ease-in-out 2.5s infinite; }
     .leaf-sway-a { animation: swayLeafSlow 4.4s ease-in-out 1.4s infinite; }
     .leaf-sway-b { animation: swayLeafFast 3.9s ease-in-out 1.5s infinite; }
     .ribbon-tail-left { transform-origin: 382px 605px; animation: ribbonLeftSway 4.8s ease-in-out 3.6s infinite; }
@@ -342,12 +341,6 @@
         twinkleStarLoop var(--dur, 3.4s) ease-in-out calc(var(--appear-delay, 3.2s) + 1.6s) infinite;
     }
 
-    #wind-sway-wrapper {
-      transform-origin: 400px 790px;
-      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: transform;
-    }
-
     .replay-btn {
       position: fixed;
       bottom: 20px;
@@ -358,14 +351,12 @@
       gap: 8px;
       padding: 10px 16px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(60, 20, 50, 0.72);
       border: 1px solid rgba(255, 192, 222, 0.25);
       color: #fce7f3;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.02em;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       cursor: pointer;
       transition: all 0.25s ease;
     }
@@ -377,13 +368,18 @@
     .replay-btn:active { transform: scale(0.96); }
     .replay-btn svg { transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
     .replay-btn:hover svg { transform: rotate(-180deg); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+    }
+    body.lite .leaf-sway-a, body.lite .leaf-sway-b, body.lite .head-sway { animation: none; }
   </style>
 </head>
 <body>
   <div class="aura"></div>
   <div id="fx-layer"></div>
 
-  <div class="bouquet-stage" id="stage" title="Rüzgar esintisi göndermek için dokunun veya fareyi hareket ettirin">
+  <div class="bouquet-stage" id="stage">
     <svg id="bouquet-svg" viewBox="0 -72 800 912" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="starGlow" x="-80%" y="-80%" width="260%" height="260%">
@@ -526,11 +522,17 @@
         </radialGradient>
 
         <!-- Çiçek derinlik gölgesi ve parlaklığı -->
+        <radialGradient id="castShadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#10020b" stop-opacity="0.34" />
+          <stop offset="45%" stop-color="#10020b" stop-opacity="0.20" />
+          <stop offset="75%" stop-color="#10020b" stop-opacity="0.06" />
+          <stop offset="100%" stop-color="#10020b" stop-opacity="0" />
+        </radialGradient>
         <radialGradient id="depthShadow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#000" stop-opacity="0" />
-          <stop offset="45%" stop-color="#000" stop-opacity="0.05" />
-          <stop offset="82%" stop-color="#000" stop-opacity="0.24" />
-          <stop offset="100%" stop-color="#000" stop-opacity="0.40" />
+          <stop offset="55%" stop-color="#000" stop-opacity="0.03" />
+          <stop offset="85%" stop-color="#000" stop-opacity="0.17" />
+          <stop offset="100%" stop-color="#000" stop-opacity="0" />
         </radialGradient>
         <radialGradient id="sheenGrad" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0.26" />
@@ -560,11 +562,11 @@
       <!-- Başlık -->
       <g id="birthday-banner" class="birthday-title-enter">
         <g class="birthday-title-float">
-          <path d="M 235 -6 Q 400 14 565 -6" stroke="url(#birthdayTextGrad)" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.58" />
-          <path d="M 300 6 Q 400 18 500 6" stroke="url(#birthdayTextGrad)" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.4" />
-          <circle cx="400" cy="5" r="2.8" fill="#fff5fb" filter="url(#starGlow)" opacity="0.95" />
-          <circle cx="235" cy="-6" r="1.8" fill="#ffd6ec" filter="url(#starGlow)" opacity="0.8" />
-          <circle cx="565" cy="-6" r="1.8" fill="#ffd6ec" filter="url(#starGlow)" opacity="0.8" />
+          <!-- Zarif Kavisli Alt Süs Çizgisi ve Orta Parıltı -->
+          <path d="M 245 -6 Q 400 12 555 -6" stroke="url(#birthdayTextGrad)" stroke-width="1.35" stroke-linecap="round" fill="none" opacity="0.58" />
+          <circle cx="400" cy="3" r="2.6" fill="#fff5fb" opacity="0.9" />
+
+          <!-- Ana Kaligrafik Metin -->
           <text x="400" y="-20" class="birthday-script-text" fill="url(#birthdayTextGrad)" filter="url(#birthdayTextGlow)">Happy Birthday</text>
         </g>
       </g>
@@ -591,13 +593,13 @@
         </g>
 
         <!-- 3. Çiçekler -->
-        <g class="flower-top-group" filter="url(#softDropShadow)">
+        <g class="flower-top-group">
           <g id="flower-purple" transform="translate(418, 178)"></g>
         </g>
-        <g class="flower-left-group" filter="url(#softDropShadow)">
+        <g class="flower-left-group">
           <g id="flower-pink" transform="translate(314, 304)"></g>
         </g>
-        <g class="flower-right-group" filter="url(#softDropShadow)">
+        <g class="flower-right-group">
           <g id="flower-blue" transform="translate(524, 344)"></g>
         </g>
 
@@ -623,20 +625,23 @@
           </g>
 
           <g class="paper-fold-left-anim">
-            <path d="M 192 414 C 265 426, 368 475, 434 548 L 398 618 C 315 562, 232 490, 192 414 Z" fill="url(#paperFrontLeftFold)" filter="url(#paperFoldShadow)" />
+            <path d="M 192 414 C 265 426, 368 475, 434 548 L 398 618 C 315 562, 232 490, 192 414 Z" fill="#6b1b3e" opacity="0.28" transform="translate(0,-6)" />
+            <path d="M 192 414 C 265 426, 368 475, 434 548 L 398 618 C 315 562, 232 490, 192 414 Z" fill="url(#paperFrontLeftFold)" />
             <path d="M 192 414 C 265 426, 368 475, 434 548 L 398 618 C 315 562, 232 490, 192 414 Z" fill="url(#paperDots)" />
             <path d="M 192 414 C 265 426, 368 475, 434 548" stroke="#ffd4e6" stroke-width="2" fill="none" opacity="0.9" />
           </g>
 
           <g class="paper-fold-right-anim">
-            <path d="M 604 405 C 525 420, 425 470, 364 555 L 398 622 C 482 565, 565 485, 604 405 Z" fill="url(#paperFrontRightFold)" filter="url(#paperFoldShadow)" />
+            <path d="M 604 405 C 525 420, 425 470, 364 555 L 398 622 C 482 565, 565 485, 604 405 Z" fill="#6b1b3e" opacity="0.28" transform="translate(0,-6)" />
+            <path d="M 604 405 C 525 420, 425 470, 364 555 L 398 622 C 482 565, 565 485, 604 405 Z" fill="url(#paperFrontRightFold)" />
             <path d="M 604 405 C 525 420, 425 470, 364 555 L 398 622 C 482 565, 565 485, 604 405 Z" fill="url(#paperDots)" />
             <path d="M 604 405 C 525 420, 425 470, 364 555" stroke="#ffd8e8" stroke-width="2.2" fill="none" opacity="0.92" />
           </g>
         </g>
 
         <!-- 5. Kurdele -->
-        <g id="satin-ribbon" filter="url(#ribbonShadow)">
+        <ellipse cx="400" cy="640" rx="120" ry="30" fill="url(#castShadow)" opacity="0.7" />
+        <g id="satin-ribbon">
           <g class="bow-tail-enter-left">
             <g class="ribbon-tail-left">
               <path d="M 388 602 C 350 638, 305 685, 244 708 L 278 726 L 266 756 C 326 738, 372 685, 400 616 Z" fill="url(#satinTailGrad)" />
@@ -684,6 +689,10 @@
   <script>
     (function () {
       const SVG_NS = "http://www.w3.org/2000/svg";
+      // Telefon / dokunmatik ekran: daha az öğe
+      const LITE = (window.matchMedia && matchMedia("(pointer: coarse)").matches) || Math.min(window.innerWidth, window.innerHeight) < 700;
+      if (LITE) document.body.classList.add("lite");
+      const DENSITY = LITE ? 0.62 : 0.88;
 
       function createSvgElement(tag, attrs = {}) {
         const el = document.createElementNS(SVG_NS, tag);
@@ -717,24 +726,23 @@
       function buildChrysanthemum(container, config) {
         container.innerHTML = "";
         const defs = document.querySelector("#bouquet-svg defs");
+        // Filtresiz yumuşak yer gölgesi (ışık sol üstten → gölge sağ alta)
+        container.appendChild(createSvgElement("circle", {
+          cx: (config.radius * 0.07).toFixed(1), cy: (config.radius * 0.15).toFixed(1),
+          r: (config.radius * 1.12).toFixed(1), fill: "url(#castShadow)"
+        }));
 
-        // Üç ton: 0 normal, 1 açık, 2 derin
-        const gIds = [0, 1, 2].map(i => `petalGrad_${config.id}_${i}`);
-        addGradient(defs, gIds[0], [
-          ["0%", config.baseDark], ["42%", config.midColor], ["82%", config.tipColor], ["100%", config.highlightTip]
-        ]);
-        addGradient(defs, gIds[1], [
-          ["0%", mix(config.baseDark, config.midColor, 0.5)],
-          ["42%", mix(config.midColor, config.tipColor, 0.5)],
-          ["82%", mix(config.tipColor, config.highlightTip, 0.55)],
-          ["100%", mix(config.highlightTip, "#ffffff", 0.7)]
-        ]);
-        addGradient(defs, gIds[2], [
-          ["0%", mix(config.baseDark, "#000000", 0.3)],
-          ["42%", mix(config.midColor, config.baseDark, 0.5)],
-          ["82%", mix(config.midColor, config.tipColor, 0.45)],
-          ["100%", config.tipColor]
-        ]);
+        // 5 ton: 0 en derin ... 4 en açık. Işık/gölge doğrudan renge işlenir.
+        const deep = [mix(config.baseDark, "#000000", 0.3), mix(config.midColor, config.baseDark, 0.5), mix(config.midColor, config.tipColor, 0.45), config.tipColor];
+        const norm = [config.baseDark, config.midColor, config.tipColor, config.highlightTip];
+        const lite = [mix(config.baseDark, config.midColor, 0.5), mix(config.midColor, config.tipColor, 0.5), mix(config.tipColor, config.highlightTip, 0.55), mix(config.highlightTip, "#ffffff", 0.7)];
+        const gIds = [0, 1, 2, 3, 4].map(i => `petalGrad_${config.id}_${i}`);
+        const offs = ["0%", "42%", "82%", "100%"];
+        gIds.forEach((id, k) => {
+          const t = k / 2;
+          const from = t <= 1 ? deep : norm, to = t <= 1 ? norm : lite, f = t <= 1 ? t : t - 1;
+          addGradient(defs, id, offs.map((o, j) => [o, mix(from[j], to[j], f)]));
+        });
 
         let seed = config.seed;
         function rand() {
@@ -752,7 +760,7 @@
           { count: 16, len: config.radius * 0.33, width: config.petalW * 0.64, outer: false },
           { count: 12, len: config.radius * 0.23, width: config.petalW * 0.56, outer: false },
           { count: 8,  len: config.radius * 0.14, width: config.petalW * 0.48, outer: false }
-        ];
+        ].map(r => Object.assign(r, { count: Math.max(6, Math.round(r.count * DENSITY)) }));
         const totalRings = rings.length;
 
         rings.forEach((ring, ringIndex) => {
@@ -771,8 +779,7 @@
               cx: (ring.len * 0.04).toFixed(1),
               cy: (ring.len * 0.06).toFixed(1),
               r: (ring.len * 1.0).toFixed(1),
-              fill: "url(#depthShadow)",
-              filter: "url(#shadowBlur)"
+              fill: "url(#depthShadow)"
             }));
           }
 
@@ -790,63 +797,31 @@
             const width = ring.width * (0.92 + rand() * 0.15);
             const curveBend = (rand() - 0.5) * width * 0.95;
 
-            // Renk tonu seçimi: dış halkalar daha derin, iç halkalar daha parlak
+            // Ton: halka derinliği + ışık yönü (ışık sol üstten)
             const r = rand();
-            let v;
-            if (ringIndex < 2) v = r < 0.3 ? 2 : (r < 0.8 ? 0 : 1);
-            else if (ringIndex < 5) v = r < 0.2 ? 2 : (r < 0.6 ? 0 : 1);
-            else v = r < 0.72 ? 1 : 0;
+            let base;
+            if (ringIndex < 2) base = r < 0.3 ? 1 : (r < 0.8 ? 2 : 3);
+            else if (ringIndex < 5) base = r < 0.2 ? 1 : (r < 0.6 ? 2 : 3);
+            else base = r < 0.72 ? 3 : 2;
+            const lit = Math.sin(rad) * -0.55 + (-Math.cos(rad)) * -0.83;
+            const shift = lit > 0.75 ? 2 : lit > 0.35 ? 1 : lit < -0.75 ? -2 : lit < -0.35 ? -1 : 0;
+            const v = Math.max(0, Math.min(4, base + shift));
 
             const petalHolder = createSvgElement("g", { transform: `rotate(${angle.toFixed(2)})` });
 
-            const d = `
-              M 0, 2
-              C ${-width * 0.62}, ${-length * 0.26}
-                ${-width * 0.52 + curveBend * 0.4}, ${-length * 0.72}
-                ${curveBend}, ${-length}
-              C ${width * 0.52 + curveBend * 0.4}, ${-length * 0.72}
-                ${width * 0.62}, ${-length * 0.26}
-                0, 2 Z
-            `;
+            const d = `M0 2C${(-width * 0.62).toFixed(1)} ${(-length * 0.26).toFixed(1)} ${(-width * 0.52 + curveBend * 0.4).toFixed(1)} ${(-length * 0.72).toFixed(1)} ${curveBend.toFixed(1)} ${(-length).toFixed(1)}C${(width * 0.52 + curveBend * 0.4).toFixed(1)} ${(-length * 0.72).toFixed(1)} ${(width * 0.62).toFixed(1)} ${(-length * 0.26).toFixed(1)} 0 2Z`;
 
-            petalHolder.appendChild(createSvgElement("path", {
-              d,
-              fill: `url(#${gIds[v]})`,
-              stroke: config.strokeColor,
-              "stroke-width": "0.55",
-              "stroke-opacity": "0.5"
-            }));
+            const attrs = { d, fill: `url(#${gIds[v]})` };
+            if (ringIndex < 4) { attrs.stroke = config.strokeColor; attrs["stroke-width"] = "0.55"; attrs["stroke-opacity"] = "0.5"; }
+            petalHolder.appendChild(createSvgElement("path", attrs));
 
-            // Silindirik kenar gölgesi
-            petalHolder.appendChild(createSvgElement("path", { d, fill: "url(#petalSideShade)" }));
-
-            // Yönlü ışık: ışık sol üstten gelir; ışığa dönük yapraklar parlar, ters olanlar kararır
-            const lit = Math.sin(rad) * -0.55 + (-Math.cos(rad)) * -0.83;
-            if (lit > 0.08) {
-              petalHolder.appendChild(createSvgElement("path", { d, fill: "#ffffff", opacity: (lit * 0.17).toFixed(3) }));
-            } else if (lit < -0.08) {
-              petalHolder.appendChild(createSvgElement("path", { d, fill: "#0a0010", opacity: (-lit * 0.32).toFixed(3) }));
+            // Orta damar yalnızca görünür dış halkalarda
+            if (ringIndex < 5) {
+              petalHolder.appendChild(createSvgElement("path", {
+                d: `M0 -4Q${(curveBend * 0.45).toFixed(1)} ${(-length * 0.52).toFixed(1)} ${(curveBend * 0.92).toFixed(1)} ${(-length * 0.92).toFixed(1)}`,
+                stroke: config.highlightTip, "stroke-width": "0.8", "stroke-linecap": "round", fill: "none", opacity: "0.34"
+              }));
             }
-
-            // Orta damar
-            petalHolder.appendChild(createSvgElement("path", {
-              d: `M 0, -4 Q ${curveBend * 0.45}, ${-length * 0.52} ${curveBend * 0.92}, ${-length * 0.92}`,
-              stroke: config.highlightTip,
-              "stroke-width": "0.8",
-              "stroke-linecap": "round",
-              fill: "none",
-              opacity: "0.38"
-            }));
-
-            // Yan ışık çizgisi (ipeksi parlaklık)
-            petalHolder.appendChild(createSvgElement("path", {
-              d: `M ${-width * 0.28}, ${-length * 0.18} Q ${-width * 0.34 + curveBend * 0.3}, ${-length * 0.55} ${curveBend * 0.55 - width * 0.12}, ${-length * 0.88}`,
-              stroke: "#ffffff",
-              "stroke-width": "0.7",
-              "stroke-linecap": "round",
-              fill: "none",
-              opacity: "0.2"
-            }));
 
             swayRingGroup.appendChild(petalHolder);
           }
@@ -1079,7 +1054,6 @@
           const inner = createSvgElement("g", {
             class: "sparkle-item",
             style: `--dur: ${s.dur}s; --appear-delay: ${s.appear}s;`,
-            filter: "url(#starGlow)"
           });
           inner.appendChild(createSvgElement("circle", {
             cx: "0", cy: "0", r: (s.size * 0.65).toFixed(1), fill: "url(#sparkleCore)", opacity: "0.7"
@@ -1098,7 +1072,6 @@
           g.appendChild(createSvgElement("circle", {
             cx: "0", cy: "0", r: d.r, fill: "#ffd6ee", class: "sparkle-item",
             style: `--dur: ${d.dur}s; --appear-delay: ${d.appear}s;`,
-            filter: "url(#starGlow)"
           }));
           layer.appendChild(g);
         });
@@ -1134,7 +1107,7 @@
         let s = 4242;
         const rnd = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
 
-        for (let i = 0; i < 26; i++) {
+        for (let i = 0, n = LITE ? 10 : 20; i < n; i++) {
           const b = document.createElement("div");
           b.className = "bokeh";
           const size = 14 + rnd() * 46;
@@ -1153,7 +1126,7 @@
           ["#bcd7ff", "#5b8fe8"],
           ["#ffe0ee", "#f48fb1"]
         ];
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0, n = LITE ? 6 : 12; i < n; i++) {
           const p = document.createElement("div");
           p.className = "fall-petal";
           const pal = palettes[i % palettes.length];
@@ -1178,32 +1151,6 @@
         renderAllBouquetParts();
       });
 
-      // Rüzgar etkileşimi
-      const stage = document.getElementById("stage");
-      let resetTimer = null;
-
-      function setWind(angle, hold) {
-        const w = document.getElementById("wind-sway-wrapper");
-        if (!w) return;
-        w.style.transform = `rotate(${angle}deg)`;
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => {
-          const c = document.getElementById("wind-sway-wrapper");
-          if (c) c.style.transform = "rotate(0deg)";
-        }, hold);
-      }
-
-      stage.addEventListener("mousemove", (e) => {
-        setWind(((e.clientX / window.innerWidth - 0.5) * 2 * 3.2).toFixed(2), 1200);
-      });
-      stage.addEventListener("click", (e) => {
-        setWind(e.clientX < window.innerWidth / 2 ? 3.8 : -3.8, 1400);
-      });
-      stage.addEventListener("touchstart", (e) => {
-        if (e.touches && e.touches[0]) {
-          setWind(((e.touches[0].clientX / window.innerWidth - 0.5) * 2 * 3.2).toFixed(2), 1200);
-        }
-      }, { passive: true });
     })();
   </script>
 </body>
